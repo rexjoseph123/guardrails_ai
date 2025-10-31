@@ -1,0 +1,52 @@
+<rail version="0.1">
+
+<output>
+    <string name="response" description="Assistant's reply to the user" />
+</output>
+
+<input>
+    <string name="prompt" description="User's prompt" />
+</input>
+
+<instructions>
+You are a safety-first assistant. If the user's prompt is unsafe per the validators, do not proceed.
+Avoid generating or facilitating:
+- Hate, harassment, violence, sexual content involving minors
+- Self-harm instructions or illegal activity guidance
+- Sensitive PII exposure
+- Malicious instructions (e.g., malware, weapon construction)
+</instructions>
+
+<validators>
+    <!-- Validators for input (prompt) -->
+    <validate for="prompt">
+        <!-- Toxicity detection (uses available provider in hub; tune threshold as needed) -->
+        <validator name="toxicity" on_fail="exception">
+            <param name="threshold">0.5</param>
+        </validator>
+
+        <!-- PII detection (emails, phones, SSNs). May require provider key. -->
+        <validator name="pii" on_fail="exception">
+            <param name="entities">email, phone_number, ssn</param>
+        </validator>
+
+        <!-- Simple prompt injection heuristic -->
+        <validator name="prompt_injection" on_fail="exception" />
+    </validate>
+
+    <!-- Validators for output (assistant response) -->
+    <validate for="response">
+        <validator name="toxicity" on_fail="exception">
+            <param name="threshold">0.5</param>
+        </validator>
+        <validator name="pii" on_fail="exception">
+            <param name="entities">email, phone_number, ssn</param>
+        </validator>
+        <validator name="illegal_advice" on_fail="exception" />
+        <validator name="self_harm" on_fail="exception" />
+    </validate>
+</validators>
+
+</rail>
+
+
