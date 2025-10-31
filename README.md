@@ -5,7 +5,7 @@ A minimal FastAPI service that detects unsafe prompts and filters model outputs 
 ### Features
 - Input guard: blocks unsafe prompts (toxicity, PII, prompt injection heuristics)
 - Output guard: filters/sanitizes unsafe generations
-- Simple `/chat` endpoint with OpenAI backend (swap to any LLM)
+- Simple `/chat` endpoint with lamma (swap to any LLM)
 
 ### Requirements
 - Python 3.10+
